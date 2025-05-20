@@ -1,35 +1,14 @@
-# Environment bootstrap for YouTube Codex CLI
-
-# Upgrade pip and install Poetry (if not present)
-
-python -m pip install --quiet --upgrade pip
-pip install --quiet poetry
-
 # Install type checker
+pip install pyright                 # Adds static type checking
 
-pip install --quiet pyright
+# Install dependencies (runtime + dev + test extras)
+poetry install --with dev,test      # Installs all Python deps, incl. dev + tests
+pnpm install                        # Installs Node deps if a lockfile/package.json exists
 
-# Install lint/format tools
-
-pip install --quiet ruff black
-
-# Install project dependencies (runtime + dev + test extras)
-
-poetry install --with dev,test
-
-# (Optional) Node dependencies — uncomment if you rely on them
-
-# pnpm install
-
-# Static analysis
-
-pyright cli/ tests/
-
-# Style checks
-
-ruff check .
-black --check .
+# Run static analysis
+pyright cli/ tests/                 # Type-check CLI package and test suite
+ruff check .                        # Lint the entire repository
+black --check .                     # Verify Black code style (non-destructive)
 
 # Run unit tests
-
-pytest -q
+pytest -q                           # Execute tests quietly, fail on first error

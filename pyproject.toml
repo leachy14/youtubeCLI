@@ -1,0 +1,71 @@
+# -----------------------------
+# Project metadata
+# -----------------------------
+[tool.poetry]
+name = "youtube-codex-cli"                     # 🔧 CLI package name (also the top-level folder)
+version = "0.1.0"                              # Bump with every release tag
+description = "CLI that integrates OpenAI Codex with the YouTube Data API."
+authors = ["Christopher Leach <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/yourorg/youtube-codex-cli"
+packages = [{ include = "cli" }]               # Where the Python code lives
+
+# -----------------------------
+# Runtime dependencies
+# -----------------------------
+[tool.poetry.dependencies]
+python = "^3.10"                               # Works on 3.10, 3.11, 3.12
+openai = "^1.30.0"                             # Access Codex/ChatGPT models
+google-api-python-client = "^2.115.0"          # YouTube Data API v3
+google-auth-oauthlib = "^1.2.0"                # OAuth 2 (device / browser flow)
+python-dotenv = "^1.0.1"                       # Load secrets from .env
+rich = "^13.7.0"                               # Pretty console UI
+click = "^8.1.7"                               # Argument parsing
+tenacity = "^8.3.0"                            # Retry helpers
+
+# ----- Optional extras -----
+pytube = { version = "^15.0.0", optional = true }  # Video download helper
+yt-dlp  = { version = "^2024.5.10", optional = true }
+httpx   = { version = "^0.27.0", extras = ["http2"], optional = true }
+
+[tool.poetry.extras]
+download = ["pytube", "yt-dlp"]                # pip install .[download]
+async    = ["httpx"]                            # pip install .[async]
+
+# -----------------------------
+# Dev & test dependencies
+# -----------------------------
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.4"                                # Fast linter
+black = "^24.4.2"                              # Code formatter
+pyright = "^1.1.360"                           # Static type checker
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.0"
+pytest-asyncio = "^0.23.6"
+coverage = "^7.5.0"
+
+# -----------------------------
+# CLI entry point
+# -----------------------------
+[tool.poetry.scripts]
+ytx = "cli.main:app"                           # `ytx --help` launches the CLI
+
+# -----------------------------
+# Formatter / linter settings
+# -----------------------------
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+# -----------------------------
+# Build system hook
+# -----------------------------
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
